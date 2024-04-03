@@ -1,0 +1,34 @@
+.summary {
+  display: flex;
+  text-align: left;
+  width: 100%;
+  margin: auto;
+  margin-top: -9rem;
+  background-color: #fff;
+  color: #000;
+  padding: 1rem;
+}
+
+.summary h2 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.summary-wrapper {
+  width: 35%;
+  padding: 11% 0 0 5%;
+}
+
+.summary h2 {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.summary p {
+  font-size: 16px;
+}
+
+.summary img {
+  height: 80%;
+  margin: 0 0 0 50%;
+}
