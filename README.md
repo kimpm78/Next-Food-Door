@@ -36,4 +36,9 @@
 ## 画面設計
 
 - Figma
+
 # Next-Food-Door
+
+## dev実行
+
+- npm run dev
