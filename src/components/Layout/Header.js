@@ -20,6 +20,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import InputBase from "@mui/material/InputBase";
+import { toast } from "react-toastify";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -77,11 +78,16 @@ const Header = (props) => {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleMenuClose();
+    handleMobileMenuClose();
+    toast.error("存在しないページです");
   };
 
   const handleMobileMenuOpen = (e) => {
     setMobileMoreAnchorEl(e.currentTarget);
+  };
+
+  const handleChange = (e) => {
+    console.log(e.target.value);
   };
 
   const menuId = "primary-search-account-menu";
@@ -180,13 +186,14 @@ const Header = (props) => {
               <StyledInputBase
                 placeholder="Next Food Doorを検索"
                 inputProps={{ "aria-label": "search" }}
+                onChange={handleChange}
               />
             </Search>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <IconButton>
                 <Badge
-                  badgeContent={4}
+                  badgeContent={props.cartQuantity}
                   color="error"
                   onClick={props.onShowCart}
                 >
@@ -237,6 +244,7 @@ const Header = (props) => {
 Header.propTypes = {
   onShowCart: PropTypes.func.isRequired,
   cartQuantity: PropTypes.number.isRequired,
+  onSearch: PropTypes.func.isRequired,
 };
 
 export default Header;

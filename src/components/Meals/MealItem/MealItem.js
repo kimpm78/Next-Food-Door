@@ -24,6 +24,7 @@ const MealItem = (props) => {
     toast.success("カートに追加しました");
   };
 
+  //クリックすると追加するハンドラー
   const handleCardClick = () => {
     addToCartHandler(1);
   };

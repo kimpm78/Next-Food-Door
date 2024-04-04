@@ -7,6 +7,7 @@ import classes from "./Cart.module.css";
 import PropTypes from "prop-types";
 
 import CartContext from "../../store/cart-context";
+import { toast } from "react-toastify";
 
 const Cart = (props) => {
   const cartCtx = useContext(CartContext);
@@ -16,6 +17,11 @@ const Cart = (props) => {
 
   const cartItemRemoveHandler = (id) => {
     cartCtx.removeItem(id);
+  };
+
+  //TODO:注文を完了するハンドラーこれによって注文リストが初期化される
+  const orderHandler = () => {
+    toast.success("注文が完了しました。しばらくお待ちください");
   };
 
   const cartItemAddHandler = (item) => {
@@ -55,7 +61,11 @@ const Cart = (props) => {
         <button className={classes["button--alt"]} onClick={props.onClose}>
           戻る
         </button>
-        {hasItems && <button className={classes.button}>注文</button>}
+        {hasItems && (
+          <button className={classes.button} onClick={orderHandler}>
+            注文
+          </button>
+        )}
       </div>
     </Modal>
   );

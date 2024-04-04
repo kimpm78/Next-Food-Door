@@ -11,6 +11,7 @@ import Banner from "./components/UI/Banner/Banner";
 
 function App() {
   const [cartIsShown, setCartIsShown] = useState(false);
+  const [cartQuantity, setCartQuantity] = useState(0);
 
   const showCartHandler = () => {
     setCartIsShown(true);
@@ -19,14 +20,17 @@ function App() {
   const hideCartHandler = () => {
     setCartIsShown(false);
   };
+  const updateCartQuantityHandler = (quantity) => {
+    setCartQuantity(quantity);
+  };
 
   return (
     <CartProvider>
       {cartIsShown && <Cart onClose={hideCartHandler} />}
-      <Header onShowCart={showCartHandler} />
-      <ToastContainer position="top-center" limit={1} autoClose={2000} />
+      <Header onShowCart={showCartHandler} cartQuantity={cartQuantity} />
+      <ToastContainer position="top-center" limit={2} autoClose={2000} />
       <main>
-        <Meals />
+        <Meals onAddToCart={updateCartQuantityHandler} />
       </main>
       <Banner />
       <Footer />
