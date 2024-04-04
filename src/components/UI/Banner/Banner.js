@@ -1,27 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import ClearIcon from "@mui/icons-material/Clear";
 
-import classes from "./Footer.module.css";
+import classes from "./Banner.module.css";
 
 const Banner = () => {
-  const [showUberOneInfo, setShowUberOneInfo] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
-  const handleDismissUberOneInfo = () => {
-    setShowUberOneInfo(false);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, 2000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
+
+  const hideBannerHandler = () => {
+    setIsVisible(false);
   };
 
   return (
-    <footer className={classes.footer__wrap}>
-      <div className={classes.footer}>
-        {showUberOneInfo && (
-          <div className={classes.uberOneInfo}>
-            <p>
-              Uber One のご利用で配達手数料が ¥0
-              <button onClick={handleDismissUberOneInfo}>X</button>
+    <footer>
+      {isVisible && (
+        <div className={classes.banner}>
+          <div className={classes.bannerContent}>
+            <p className={classes.bannerText}>
+              Next Food Door のご利用で配達手数料が ¥0
             </p>
+            <button
+              className={classes.bannerButton}
+              onClick={hideBannerHandler}
+            >
+              <ClearIcon />
+            </button>
           </div>
-        )}
-        <div className={classes.footer__inner}>{/* Footer 내용 */}</div>
-      </div>
+        </div>
+      )}
     </footer>
   );
 };

@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
 import CartIcon from "../Cart/CartIcon";
 
@@ -15,10 +16,6 @@ const CartButton = (props) => {
     return curNumber + item.amount;
   }, 0);
 
-  const btnClasses = `${classes.button} ${
-    btnIsHighlighted ? classes.bump : ""
-  }`;
-
   useEffect(() => {
     if (items.length === 0) {
       return;
@@ -33,15 +30,34 @@ const CartButton = (props) => {
     };
   }, [items]);
 
+  const handleIconClick = () => {
+    props.onClick(); // 부모 컴포넌트에 클릭 이벤트 전달
+  };
+
+  const handleIconKeyPress = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      handleIconClick();
+    }
+  };
+
   return (
-    <button className={btnClasses} onClick={props.onClick}>
+    <div
+      className={`${classes.cartButton} ${btnIsHighlighted ? classes.bump : ""}`} // btnIsHighlighted 상태에 따라 클래스를 조건적으로 추가
+      role="button"
+      onClick={handleIconClick}
+      onKeyDown={handleIconKeyPress}
+      tabIndex={0}
+    >
       <span className={classes.icon}>
         <CartIcon />
       </span>
-      <span>カート</span>
       <span className={classes.badge}>{numberOfCartItems}</span>
-    </button>
+    </div>
   );
+};
+
+CartButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
 };
 
 export default CartButton;

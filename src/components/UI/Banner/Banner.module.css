@@ -1,0 +1,40 @@
+.banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #ae7159;
+  z-index: 999;
+  animation: slideInFromBottom 1s ease-out forwards;
+}
+
+.bannerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.bannerText {
+  margin: 0;
+  font-size: 16px;
+  color: #fff;
+}
+
+.bannerButton {
+  border: none;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

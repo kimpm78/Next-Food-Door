@@ -1,6 +1,6 @@
-import React from 'react';
-
-import classes from './Input.module.css';
+import React from "react";
+import classes from "./Input.module.css";
+import PropTypes from "prop-types";
 
 const Input = React.forwardRef((props, ref) => {
   return (
@@ -10,5 +10,12 @@ const Input = React.forwardRef((props, ref) => {
     </div>
   );
 });
+
+Input.displayName = "Input";
+
+Input.propTypes = {
+  input: PropTypes.object.isRequired,
+  label: PropTypes.string.isRequired,
+};
 
 export default Input;

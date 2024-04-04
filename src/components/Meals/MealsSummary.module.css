@@ -3,9 +3,6 @@
   text-align: left;
   width: 100%;
   margin: auto;
-  margin-top: -9rem;
-  background-color: #fff;
-  color: #000;
   padding: 1rem;
 }
 
@@ -29,6 +26,5 @@
 }
 
 .summary img {
-  height: 80%;
   margin: 0 0 0 50%;
 }
