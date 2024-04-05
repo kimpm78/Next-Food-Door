@@ -5,9 +5,9 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Layout/Header";
 import Footer from "./components/UI/Footer/Footer";
 import Cart from "./components/Cart/Cart";
-import CartProvider from "./store/CartProvider";
 import Meals from "./components/Meals/Meals";
 import Banner from "./components/UI/Banner/Banner";
+import CartProvider from "./store/CartProvider";
 
 function App() {
   const [cartIsShown, setCartIsShown] = useState(false);
@@ -28,7 +28,7 @@ function App() {
     <CartProvider>
       {cartIsShown && <Cart onClose={hideCartHandler} />}
       <Header onShowCart={showCartHandler} cartQuantity={cartQuantity} />
-      <ToastContainer position="top-center" limit={2} autoClose={2000} />
+      <ToastContainer position="top-center" limit={2} autoClose={1000} />
       <main>
         <Meals onAddToCart={updateCartQuantityHandler} />
       </main>

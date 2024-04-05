@@ -31,7 +31,7 @@ const CartButton = (props) => {
   }, [items]);
 
   const handleIconClick = () => {
-    props.onClick(); // 부모 컴포넌트에 클릭 이벤트 전달
+    props.onClick(); // 親のコンポーネントにクリックイベントガンドラーを伝播
   };
 
   const handleIconKeyPress = (event) => {

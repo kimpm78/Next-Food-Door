@@ -82,7 +82,6 @@ const CartProvider = (props) => {
     dispatchCartAction({ type: "REMOVE", id: id });
   };
 
-  // TODO: 나중에 동적으로 바꿀 예정
   const cartContext = {
     items: cartState.items,
     totalAmount: cartState.totalAmount,

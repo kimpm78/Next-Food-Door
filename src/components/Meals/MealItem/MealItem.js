@@ -19,7 +19,6 @@ const MealItem = (props) => {
       name: props.name,
       amount: amount,
       price: props.price,
-      image: props.image,
     });
     toast.success("カートに追加しました");
   };

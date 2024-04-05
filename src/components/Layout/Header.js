@@ -135,7 +135,7 @@ const Header = (props) => {
           aria-label="show 14 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={14} color="error">
+          <Badge badgeContent={2} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -191,9 +191,13 @@ const Header = (props) => {
             </Search>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <IconButton>
+              <IconButton
+                size="large"
+                aria-label="show 4 new mails"
+                color="inherit"
+              >
                 <Badge
-                  badgeContent={props.cartQuantity}
+                  badgeContent={2}
                   color="error"
                   onClick={props.onShowCart}
                 >
@@ -202,10 +206,10 @@ const Header = (props) => {
               </IconButton>
               <IconButton
                 size="large"
-                aria-label="show 14 new notifications"
+                aria-label="show 2 new notifications"
                 color="inherit"
               >
-                <Badge badgeContent={14} color="error">
+                <Badge badgeContent={2} color="error">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
