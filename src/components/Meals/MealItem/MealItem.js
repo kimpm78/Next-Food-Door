@@ -16,6 +16,7 @@ const MealItem = (props) => {
   const addToCartHandler = (amount) => {
     cartCtx.addItem({
       id: props.id,
+      storeId: props.storeId,
       name: props.name,
       amount: amount,
       price: props.price,
@@ -33,6 +34,15 @@ const MealItem = (props) => {
       <Card sx={{ maxWidth: 500 }}>
         <CardActionArea onClick={handleCardClick}>
           <CardContent>
+            {props.badge && (
+              <span
+                className={`${classes.badge} ${
+                  props.badge === "BEST" ? classes.best : classes.new
+                }`}
+              >
+                {props.badge}
+              </span>
+            )}
             <CardMedia
               component="img"
               className={classes.image}
@@ -58,10 +68,15 @@ const MealItem = (props) => {
 MealItem.propTypes = {
   description: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
+  storeId: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   price: PropTypes.number.isRequired,
   image: PropTypes.string.isRequired,
-  onAddToCart: PropTypes.func.isRequired,
+  badge: PropTypes.string,
+};
+
+MealItem.defaultProps = {
+  badge: "",
 };
 
 export default MealItem;

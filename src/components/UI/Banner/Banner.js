@@ -26,7 +26,7 @@ const Banner = () => {
         <div className={classes.banner}>
           <div className={classes.bannerContent}>
             <p className={classes.bannerText}>
-              Next Food Door のご利用で配達手数料が ¥0
+              メシドア のご利用で配達手数料が ¥0
             </p>
             <button
               className={classes.bannerButton}

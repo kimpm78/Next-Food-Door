@@ -9,6 +9,8 @@ const CartContext = React.createContext({
   addItem: () => {},
   // カートに入ったアイテムを削除する関数
   removeItem: () => {},
+  // カートを空にする関数
+  clearCart: () => {},
 });
 
 export default CartContext;

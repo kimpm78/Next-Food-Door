@@ -21,7 +21,7 @@ const Footer = () => {
             ))}
           </div>
           <div className={classes.footer__right}>
-            2022-2024 Food Eats All Right Reserved
+            © 2022-2026 メシドア All Rights Reserved
           </div>
         </div>
       </div>
@@ -50,7 +50,7 @@ const footerMenuItems = [
     title: "地図",
     items: [
       { label: "全ての都市を表示", link: "/" },
-      { label: "全ての国を見る", link: "/" },
+      { label: "店舗見る", link: "/" },
     ],
   },
   {

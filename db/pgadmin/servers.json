@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "メシドア PostgreSQL",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "next_food_door",
+      "Username": "next_food_door",
+      "SSLMode": "prefer"
+    }
+  }
+}

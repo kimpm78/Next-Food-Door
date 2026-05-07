@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -9,6 +9,7 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Button,
   Toolbar,
 } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
@@ -21,6 +22,11 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import InputBase from "@mui/material/InputBase";
 import { toast } from "react-toastify";
+import CartContext from "../../store/cart-context";
+import {
+  getNotifications,
+  markNotificationsAsRead,
+} from "../../utils/storage";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -63,23 +69,36 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 const Header = (props) => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const cartCtx = useContext(CartContext);
+  const [profileAnchorEl, setProfileAnchorEl] = React.useState(null);
+  const [notificationAnchorEl, setNotificationAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const cartQuantity = cartCtx.items.reduce((sum, item) => {
+    return sum + item.amount;
+  }, 0);
 
-  const isMenuOpen = Boolean(anchorEl);
+  const isProfileMenuOpen = Boolean(profileAnchorEl);
+  const isNotificationMenuOpen = Boolean(notificationAnchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const handleProfileMenuOpen = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
+  const handleProfileMenuOpen = (event) => {
+    setProfileAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-    toast.error("存在しないページです");
+  const handleProfileMenuClose = () => {
+    setProfileAnchorEl(null);
+  };
+
+  const handleNotificationMenuOpen = (event) => {
+    setNotificationAnchorEl(event.currentTarget);
+  };
+
+  const handleNotificationMenuClose = () => {
+    setNotificationAnchorEl(null);
+  };
+
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
   };
 
   const handleMobileMenuOpen = (e) => {
@@ -87,26 +106,82 @@ const Header = (props) => {
   };
 
   const handleChange = (e) => {
-    console.log(e.target.value);
+    props.onSearch(e.target.value);
+    if (props.currentPath !== "/" && !props.currentPath.startsWith("/stores/")) {
+      props.onNavigate("/");
+    }
   };
 
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
+  const orderHistoryHandler = () => {
+    handleProfileMenuClose();
+    handleMobileMenuClose();
+    props.onNavigate("/profile");
+  };
+
+  const logoutHandler = () => {
+    localStorage.removeItem("nfd_current_user");
+    props.onLogout();
+    handleProfileMenuClose();
+    handleMobileMenuClose();
+    props.onNavigate("/");
+    toast.success("ログアウトしました。");
+  };
+
+  const userNotifications = props.currentUser
+    ? getNotifications().filter(
+        (notification) => notification.userEmail === props.currentUser.email
+      )
+    : [];
+
+  const notificationClickHandler = (event) => {
+    handleNotificationMenuOpen(event);
+
+    if (props.currentUser) {
+      markNotificationsAsRead(props.currentUser.email);
+      props.onNotificationsRead();
+    }
+  };
+
+  const profileMenuId = "profile-menu";
+  const renderProfileMenu = (
     <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={menuId}
+      anchorEl={profileAnchorEl}
+      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      id={profileMenuId}
       keepMounted
       transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
+      open={isProfileMenuOpen}
+      onClose={handleProfileMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>プロフィール</MenuItem>
-      <MenuItem onClick={handleMenuClose}>アカウント</MenuItem>
+      <MenuItem onClick={orderHistoryHandler}>注文履歴</MenuItem>
+      <MenuItem onClick={logoutHandler}>ログアウト</MenuItem>
     </Menu>
   );
 
   const mobileMenuId = "primary-search-account-menu-mobile";
+  const notificationMenuId = "notification-menu";
+  const renderNotificationMenu = (
+    <Menu
+      anchorEl={notificationAnchorEl}
+      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      id={notificationMenuId}
+      keepMounted
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isNotificationMenuOpen}
+      onClose={handleNotificationMenuClose}
+    >
+      {userNotifications.length === 0 ? (
+        <MenuItem onClick={handleNotificationMenuClose}>通知はありません</MenuItem>
+      ) : (
+        userNotifications.map((notification) => (
+          <MenuItem key={notification.id} onClick={handleNotificationMenuClose}>
+            {notification.message}
+          </MenuItem>
+        ))
+      )}
+    </Menu>
+  );
+
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -117,42 +192,64 @@ const Header = (props) => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={props.onShowCart}>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+      <MenuItem
+        onClick={() => {
+          handleMobileMenuClose();
+          props.onShowCart();
+        }}
+      >
+        <IconButton size="large" aria-label="open cart" color="inherit">
+          <Badge badgeContent={cartQuantity} color="error">
             <ShoppingCartIcon />
           </Badge>
         </IconButton>
-        <p>カード</p>
+        <p>카트</p>
       </MenuItem>
       <MenuItem
-        size="large"
-        aria-label="show 14 new notifications"
-        color="inherit"
+        onClick={(event) => {
+          handleMobileMenuClose();
+          notificationClickHandler(event);
+        }}
       >
         <IconButton
           size="large"
-          aria-label="show 14 new notifications"
+          aria-label="show notifications"
           color="inherit"
         >
-          <Badge badgeContent={2} color="error">
+          <Badge badgeContent={props.unreadNotificationCount} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
         <p>通知</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
+      {props.currentUser ? (
+        [
+          <MenuItem key="profile" onClick={orderHistoryHandler}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="primary-search-account-menu"
+              aria-haspopup="true"
+              color="inherit"
+            >
+              <AccountCircle />
+            </IconButton>
+            <p>プロフィール</p>
+          </MenuItem>,
+          <MenuItem key="logout" onClick={logoutHandler}>
+            ログアウト
+          </MenuItem>,
+        ]
+      ) : (
+        <MenuItem
+          onClick={() => {
+            handleMobileMenuClose();
+            props.onNavigate("/login");
+          }}
         >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+          ログイン
+        </MenuItem>
+      )}
     </Menu>
   );
 
@@ -175,54 +272,82 @@ const Header = (props) => {
               vertical="h6"
               noWrap
               component="div"
-              sx={{ display: { xs: "none", sm: "block" } }}
+              onClick={() => props.onNavigate("/")}
+              sx={{
+                alignItems: "center",
+                cursor: "pointer",
+                display: { xs: "none", sm: "flex" },
+                fontWeight: 700,
+                gap: 1,
+              }}
             >
-              Next Food Door
+              <Box
+                component="img"
+                src={process.env.PUBLIC_URL + "/meshidoor_logo.png"}
+                alt="メシドア"
+                sx={{
+                  backgroundColor: "#ffffff",
+                  borderRadius: "6px",
+                  height: 36,
+                  objectFit: "contain",
+                  p: "2px",
+                  width: 36,
+                }}
+              />
+              メシドア
             </Typography>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
               <StyledInputBase
-                placeholder="Next Food Doorを検索"
+                placeholder="メシドアを検索"
                 inputProps={{ "aria-label": "search" }}
                 onChange={handleChange}
+                value={props.searchTerm}
               />
             </Search>
             <Box sx={{ flexGrow: 1 }} />
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
               <IconButton
                 size="large"
-                aria-label="show 4 new mails"
+                aria-label="open cart"
                 color="inherit"
+                onClick={props.onShowCart}
               >
-                <Badge
-                  badgeContent={2}
-                  color="error"
-                  onClick={props.onShowCart}
-                >
+                <Badge badgeContent={cartQuantity} color="error">
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>
               <IconButton
                 size="large"
-                aria-label="show 2 new notifications"
+                aria-label="show notifications"
                 color="inherit"
+                aria-controls={notificationMenuId}
+                aria-haspopup="true"
+                onClick={notificationClickHandler}
               >
-                <Badge badgeContent={2} color="error">
+                <Badge badgeContent={props.unreadNotificationCount} color="error">
                   <NotificationsIcon />
                 </Badge>
               </IconButton>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls={menuId}
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
+              {props.currentUser ? (
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls={profileMenuId}
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  onMouseEnter={handleProfileMenuOpen}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+              ) : (
+                <Button color="inherit" onClick={() => props.onNavigate("/login")}>
+                  ログイン
+                </Button>
+              )}
             </Box>
             <Box sx={{ display: { xs: "flex", md: "none" } }}>
               <IconButton
@@ -239,7 +364,8 @@ const Header = (props) => {
           </Toolbar>
         </AppBar>
         {renderMobileMenu}
-        {renderMenu}
+        {renderProfileMenu}
+        {renderNotificationMenu}
       </Box>
     </React.Fragment>
   );
@@ -247,8 +373,19 @@ const Header = (props) => {
 
 Header.propTypes = {
   onShowCart: PropTypes.func.isRequired,
-  cartQuantity: PropTypes.number.isRequired,
+  currentPath: PropTypes.string.isRequired,
+  currentUser: PropTypes.object,
+  notificationVersion: PropTypes.number.isRequired,
+  onLogout: PropTypes.func.isRequired,
+  onNavigate: PropTypes.func.isRequired,
+  onNotificationsRead: PropTypes.func.isRequired,
   onSearch: PropTypes.func.isRequired,
+  searchTerm: PropTypes.string.isRequired,
+  unreadNotificationCount: PropTypes.number.isRequired,
+};
+
+Header.defaultProps = {
+  currentUser: null,
 };
 
 export default Header;

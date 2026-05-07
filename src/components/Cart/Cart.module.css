@@ -44,3 +44,19 @@
   background-color: #8a2b06;
   color: white;
 }
+
+.loginRequired {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.loginRequired h2 {
+  margin: 0;
+  color: #2f211b;
+}
+
+.loginRequired p {
+  margin: 0 0 0.5rem;
+  color: #5f5048;
+}

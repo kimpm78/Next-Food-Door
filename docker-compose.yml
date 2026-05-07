@@ -1,0 +1,78 @@
+services:
+  frontend:
+    image: node:20-alpine
+    container_name: meshidoor-frontend
+    working_dir: /app
+    restart: unless-stopped
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3000
+      REACT_APP_API_BASE_URL: http://localhost:4000/api
+      WDS_SOCKET_PORT: 3000
+      CHOKIDAR_USEPOLLING: "true"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - frontend_node_modules:/app/node_modules
+    command: sh -c "npm install && npm run dev"
+    depends_on:
+      - backend
+      - postgres
+
+  backend:
+    image: node:20-alpine
+    container_name: meshidoor-admin-api
+    working_dir: /app
+    restart: unless-stopped
+    environment:
+      PORT: 4000
+      PGHOST: postgres
+      PGPORT: 5432
+      PGDATABASE: next_food_door
+      PGUSER: next_food_door
+      PGPASSWORD: next_food_door_password
+      CORS_ORIGIN: http://localhost:3000
+    ports:
+      - "4000:4000"
+    volumes:
+      - .:/app
+      - backend_node_modules:/app/node_modules
+    command: sh -c "npm install && node server/admin-api.js"
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: next-food-door-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: next_food_door
+      POSTGRES_USER: next_food_door
+      POSTGRES_PASSWORD: next_food_door_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: next-food-door-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@nextfooddoor.com
+      PGADMIN_DEFAULT_PASSWORD: admin1234
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./db/pgadmin/servers.json:/pgadmin4/servers.json:ro
+
+volumes:
+  frontend_node_modules:
+  backend_node_modules:
+  postgres_data:
+  pgadmin_data:
