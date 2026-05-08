@@ -108,6 +108,10 @@ const drawerMenuGroups = [
       { label: "メンバーシップとロイヤルティ", path: "/contact/membership" },
     ],
   },
+  {
+    title: "管理",
+    items: [{ label: "管理者ページ", path: "/admin" }],
+  },
 ];
 
 const Header = (props) => {

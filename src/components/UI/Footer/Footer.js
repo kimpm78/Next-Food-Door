@@ -80,6 +80,10 @@ const footerMenuItems = [
     ],
   },
   {
+    title: "管理",
+    items: [{ label: "管理者ページ", link: "/admin" }],
+  },
+  {
     title: "SNS",
     items: [
       { label: "Instagram", link: "/" },
