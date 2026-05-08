@@ -1,0 +1,96 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 20px;
+  line-height: 1.8;
+  color: #333;
+}
+
+.container h1 {
+  font-size: 32px;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.container h2 {
+  font-size: 20px;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  border-left: 4px solid #ff7a00;
+  padding-left: 12px;
+}
+
+.container p {
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.container ul {
+  padding-left: 24px;
+}
+
+.container li {
+  margin-bottom: 8px;
+}
+
+/* 問い合わせ */
+.container form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.container label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.container input,
+.container textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.container button {
+  width: fit-content;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ff7a00;
+  color: #fff;
+  cursor: pointer;
+}
+/* 地図 */
+.container button + button {
+  margin-left: 12px;
+}
+
+.container article {
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.container article h3 {
+  font-size: 20px;
+  margin: 8px 0;
+}
+
+.container article p {
+  margin: 6px 0;
+}
+
+.container button {
+  margin: 6px 8px 6px 0;
+}
+
+.noticeText {
+  color: red;
+  font-weight: bold;
+}

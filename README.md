@@ -4,6 +4,9 @@
 
 - メシドアは食べ物を届ける配達サービスのプロジェクトです。
 
+## 実行確認
+https://kimpm78.github.io/Next-Food-Door
+
 ## 開発言語 /フレームワーク
 
 - JavaScript
@@ -42,7 +45,7 @@ Dockerを使用して、フロントエンド、PostgreSQL、pgAdminをまとめ
 docker compose up -d
 ```
 
-- Frontend: `http://localhost:3000/Next-Food-Door`
+- Frontend: `http://localhost:3000`
 - Admin API: `http://localhost:4000/api`
 - PostgreSQL: `localhost:5433`
 - pgAdmin: `http://localhost:5050`

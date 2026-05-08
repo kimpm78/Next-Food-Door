@@ -1,7 +1,8 @@
 import React from "react";
+import PropTypes from "prop-types";
 import classes from "./Footer.module.css";
 
-const Footer = () => {
+const Footer = ({ onNavigate }) => {
   return (
     <footer className={classes.footer__wrap}>
       <div className={classes.footer}>
@@ -13,7 +14,19 @@ const Footer = () => {
                 <ul>
                   {menu.items.map((item, idx) => (
                     <li key={idx}>
-                      <a href={item.link}>{item.label}</a>
+                      <a
+                        href={item.link}
+                        onClick={(event) => {
+                          if (!item.isExternal && onNavigate) {
+                            event.preventDefault();
+                            onNavigate(item.link);
+                          }
+                        }}
+                        target={item.isExternal ? "_blank" : undefined}
+                        rel={item.isExternal ? "noreferrer" : undefined}
+                      >
+                        {item.label}
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -33,40 +46,37 @@ const footerMenuItems = [
   {
     title: "情報",
     items: [
-      { label: "紹介", link: "/" },
-      { label: "個人情報保護方針", link: "/" },
-      { label: "利用規約", link: "/" },
+      { label: "紹介", link: "/about" },
+      { label: "個人情報保護方針", link: "/privacy" },
+      { label: "利用規約", link: "/terms" },
     ],
   },
   {
     title: "利用方法",
     items: [
-      { label: "注文する", link: "/" },
-      { label: "配達", link: "/" },
-      { label: "アプリダウンロード", link: "/" },
-    ],
-  },
-  {
-    title: "地図",
-    items: [
-      { label: "全ての都市を表示", link: "/" },
-      { label: "店舗見る", link: "/" },
+      { label: "注文する", link: "/how-to-order" },
+      { label: "配達", link: "/delivery" },
+      { label: "アプリダウンロード", link: "/app-download" },
+      { label: "地図", link: "/map" },
     ],
   },
   {
     title: "登録する",
     items: [
-      { label: "加盟レストランとして登録する", link: "/" },
-      { label: "配達パートナーとしてとして登録する", link: "/" },
-      { label: "ビジネス用アカウントを作成する", link: "/" },
+      { label: "加盟レストランとして登録する", link: "/restaurant-register" },
+      {
+        label: "配達パートナーとして登録する",
+        link: "/delivery-partner-register",
+      },
+      { label: "ビジネス用アカウントを作成する", link: "/business-register" },
     ],
   },
   {
     title: "問い合わせる",
     items: [
-      { label: "注文に関するヘルプ", link: "/" },
-      { label: "アカウントとお支払い", link: "/" },
-      { label: "メンバーショプとロイヤルティ", link: "/" },
+      { label: "注文に関するヘルプ", link: "/contact/order" },
+      { label: "アカウントとお支払い", link: "/contact/account-payment" },
+      { label: "メンバーシップとロイヤルティ", link: "/contact/membership" },
     ],
   },
   {
@@ -79,5 +89,10 @@ const footerMenuItems = [
     ],
   },
 ];
+
+
+Footer.propTypes = {
+  onNavigate: PropTypes.func,
+};
 
 export default Footer;

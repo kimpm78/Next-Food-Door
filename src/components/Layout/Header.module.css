@@ -1,0 +1,98 @@
+.appBar {
+  background-color: #8a2b06 !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.logoImage {
+  width: 36px;
+  height: 36px;
+  padding: 2px;
+  object-fit: contain;
+  background-color: #ffffff;
+  border-radius: 6px;
+}
+
+.drawerPaper {
+  border-top-right-radius: 18px;
+  border-bottom-right-radius: 18px;
+  overflow: hidden;
+}
+
+.drawer {
+  width: 280px;
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #fffaf7;
+  -webkit-overflow-scrolling: touch;
+}
+
+.drawerHeader {
+  padding: 20px 18px;
+  background: linear-gradient(135deg, #8a2b06, #c65a1e);
+  color: #ffffff;
+}
+
+.drawerTitle {
+  font-weight: 700 !important;
+  letter-spacing: 0.04em;
+}
+
+.drawerSubTitle {
+  margin-top: 4px !important;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.drawerGroupTitleWrap {
+  padding: 18px 16px 8px;
+}
+
+.drawerGroupTitle {
+  color: #8a2b06 !important;
+  font-weight: 700 !important;
+}
+
+.drawerItem {
+  padding: 9px 18px !important;
+}
+
+.drawerItem:hover {
+  background-color: rgba(138, 43, 6, 0.08) !important;
+}
+
+.drawerItem.Mui-selected {
+  background-color: rgba(138, 43, 6, 0.14) !important;
+}
+
+.drawerItem.Mui-selected:hover {
+  background-color: rgba(138, 43, 6, 0.18) !important;
+}
+
+.drawerItemText {
+  font-size: 14px !important;
+  color: #333333;
+}
+
+
+@media (max-width: 600px) {
+  .drawerPaper {
+    width: 86vw;
+    max-width: 320px;
+  }
+
+  .drawer {
+    width: 100%;
+    padding-bottom: 24px;
+  }
+
+  .drawerHeader {
+    padding: 18px 16px;
+  }
+
+  .drawerGroupTitleWrap {
+    padding: 16px 16px 6px;
+  }
+
+  .drawerItem {
+    padding: 11px 18px !important;
+  }
+}

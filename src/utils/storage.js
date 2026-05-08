@@ -11,8 +11,25 @@ const writeJson = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
 
+const isLocalRuntime = ["localhost", "127.0.0.1"].includes(
+  window.location.hostname
+);
 const apiBaseUrl =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:4000/api";
+  process.env.REACT_APP_API_BASE_URL ||
+  (isLocalRuntime ? "http://localhost:4000/api" : "");
+const demoAdmin = {
+  id: "demo-admin",
+  email: "admin@nextfooddoor.com",
+  name: "メシドア管理者",
+};
+
+const authenticateDemoAdmin = (email, password) => {
+  if (email === demoAdmin.email && password === "admin1234") {
+    return demoAdmin;
+  }
+
+  return null;
+};
 
 export const getUsers = () => readJson("nfd_users", []);
 
@@ -43,20 +60,28 @@ export const authenticateUser = (email, password) => {
 export const getCurrentUser = () => readJson("nfd_current_user", null);
 
 export const authenticateAdmin = async (email, password) => {
-  const response = await fetch(`${apiBaseUrl}/admin/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
-  });
-
-  if (!response.ok) {
-    return null;
+  if (!apiBaseUrl) {
+    return authenticateDemoAdmin(email, password);
   }
 
-  const result = await response.json();
-  return result.ok ? result.admin : null;
+  try {
+    const response = await fetch(`${apiBaseUrl}/admin/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const result = await response.json();
+    return result.ok ? result.admin : null;
+  } catch (error) {
+    return authenticateDemoAdmin(email, password);
+  }
 };
 
 export const getProducts = () => readJson("nfd_products", []);

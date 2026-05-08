@@ -7,9 +7,13 @@ import {
   Button,
   Checkbox,
   FormControlLabel,
+  IconButton,
+  InputAdornment,
   TextField,
   Typography,
 } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import { authenticateUser, saveUser } from "../utils/storage";
 import classes from "./Pages.module.css";
@@ -71,18 +75,32 @@ export const SignupPage = ({ onNavigate }) => {
   const [form, setForm] = useState({
     email: "",
     password: "",
+    passwordConfirm: "",
     name: "",
     address: "",
     phone: "",
     terms: false,
+  });
+  const [visiblePasswords, setVisiblePasswords] = useState({
+    password: false,
+    passwordConfirm: false,
   });
 
   const updateField = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
+  const togglePasswordVisibility = (field) => {
+    setVisiblePasswords((prev) => ({ ...prev, [field]: !prev[field] }));
+  };
+
   const submitHandler = (event) => {
     event.preventDefault();
+
+    if (form.password !== form.passwordConfirm) {
+      toast.error("パスワードが一致しません。");
+      return;
+    }
 
     if (!form.terms) {
       toast.error("利用規約に同意してください。");
@@ -120,12 +138,53 @@ export const SignupPage = ({ onNavigate }) => {
         />
         <TextField
           label="パスワード"
-          type="password"
+          type={visiblePasswords.password ? "text" : "password"}
           value={form.password}
           onChange={(event) => updateField("password", event.target.value)}
           required
           fullWidth
           inputProps={{ minLength: 6 }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="パスワードを表示"
+                  edge="end"
+                  onClick={() => togglePasswordVisibility("password")}
+                >
+                  {visiblePasswords.password ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TextField
+          label="パスワード確認"
+          type={visiblePasswords.passwordConfirm ? "text" : "password"}
+          value={form.passwordConfirm}
+          onChange={(event) =>
+            updateField("passwordConfirm", event.target.value)
+          }
+          required
+          fullWidth
+          inputProps={{ minLength: 6 }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="パスワード確認を表示"
+                  edge="end"
+                  onClick={() => togglePasswordVisibility("passwordConfirm")}
+                >
+                  {visiblePasswords.passwordConfirm ? (
+                    <VisibilityOff />
+                  ) : (
+                    <Visibility />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
         />
         <TextField
           label="お名前"

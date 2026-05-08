@@ -35,10 +35,10 @@ const Stores = (props) => {
   });
 
   return (
-    <section className={classes.stores}>
+    <section id="stores-section" className={classes.stores}>
       <div className={classes.header}>
         <div>
-          <h2>店舗を見る</h2>
+          <h2>料理を探す</h2>
           <p>地域とカテゴリから近くの店舗を探せます。</p>
         </div>
         <div className={classes.categories}>

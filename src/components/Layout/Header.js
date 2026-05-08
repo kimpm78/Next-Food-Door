@@ -11,6 +11,11 @@ import {
   MenuItem,
   Button,
   Toolbar,
+  Drawer,
+  Divider,
+  List,
+  ListItemButton,
+  ListItemText,
 } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -22,6 +27,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import InputBase from "@mui/material/InputBase";
 import { toast } from "react-toastify";
+import classes from "./Header.module.css";
 import CartContext from "../../store/cart-context";
 import {
   getNotifications,
@@ -68,11 +74,48 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
+const drawerMenuGroups = [
+  {
+    title: "情報",
+    items: [
+      { label: "紹介", path: "/about" },
+      { label: "個人情報保護方針", path: "/privacy" },
+      { label: "利用規約", path: "/terms" },
+      { label: "地図", path: "/map" },
+    ],
+  },
+  {
+    title: "利用方法",
+    items: [
+      { label: "注文する", path: "/how-to-order" },
+      { label: "配達", path: "/delivery" },
+      { label: "アプリダウンロード", path: "/app-download" },
+    ],
+  },
+  {
+    title: "登録する",
+    items: [
+      { label: "加盟レストランとして登録する", path: "/restaurant-register" },
+      { label: "配達パートナーとして登録する", path: "/delivery-partner-register" },
+      { label: "ビジネス用アカウントを作成する", path: "/business-register" },
+    ],
+  },
+  {
+    title: "問い合わせる",
+    items: [
+      { label: "注文に関するヘルプ", path: "/contact/order" },
+      { label: "アカウントとお支払い", path: "/contact/account-payment" },
+      { label: "メンバーシップとロイヤルティ", path: "/contact/membership" },
+    ],
+  },
+];
+
 const Header = (props) => {
   const cartCtx = useContext(CartContext);
   const [profileAnchorEl, setProfileAnchorEl] = React.useState(null);
   const [notificationAnchorEl, setNotificationAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
   const cartQuantity = cartCtx.items.reduce((sum, item) => {
     return sum + item.amount;
   }, 0);
@@ -103,6 +146,19 @@ const Header = (props) => {
 
   const handleMobileMenuOpen = (e) => {
     setMobileMoreAnchorEl(e.currentTarget);
+  };
+
+  const handleDrawerOpen = () => {
+    setDrawerOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
+  };
+
+  const drawerNavigateHandler = (path) => {
+    handleDrawerClose();
+    props.onNavigate(path);
   };
 
   const handleChange = (e) => {
@@ -253,11 +309,58 @@ const Header = (props) => {
     </Menu>
   );
 
+  const renderDrawer = (
+    <Drawer
+      anchor="left"
+      open={drawerOpen}
+      onClose={handleDrawerClose}
+      PaperProps={{ className: classes.drawerPaper }}
+    >
+      <Box className={classes.drawer} role="presentation">
+        <Box className={classes.drawerHeader}>
+          <Typography variant="h6" className={classes.drawerTitle}>
+            メシドア
+          </Typography>
+          <Typography variant="body2" className={classes.drawerSubTitle}>
+            Food delivery service
+          </Typography>
+        </Box>
+        <Divider />
+
+        {drawerMenuGroups.map((group) => (
+          <Box key={group.title}>
+            <Box className={classes.drawerGroupTitleWrap}>
+              <Typography variant="subtitle2" className={classes.drawerGroupTitle}>
+                {group.title}
+              </Typography>
+            </Box>
+            <List disablePadding>
+              {group.items.map((item) => (
+                <ListItemButton
+                  key={item.path}
+                  className={classes.drawerItem}
+                  selected={props.currentPath === item.path}
+                  onClick={() => drawerNavigateHandler(item.path)}
+                >
+                  <ListItemText
+                    primary={item.label}
+                    primaryTypographyProps={{ className: classes.drawerItemText }}
+                  />
+                </ListItemButton>
+              ))}
+            </List>
+            <Divider />
+          </Box>
+        ))}
+      </Box>
+    </Drawer>
+  );
+
   return (
     <React.Fragment>
       <CssBaseline />
       <Box sx={{ flexGrow: 1 }}>
-        <AppBar position="fixed" sx={{ backgroundColor: "#8A2B06" }}>
+        <AppBar position="fixed" className={classes.appBar}>
           <Toolbar>
             <IconButton
               size="large"
@@ -265,6 +368,7 @@ const Header = (props) => {
               color="inherit"
               aria-label="open drawer"
               sx={{ mr: 2 }}
+              onClick={handleDrawerOpen}
             >
               <MenuIcon />
             </IconButton>
@@ -285,14 +389,7 @@ const Header = (props) => {
                 component="img"
                 src={process.env.PUBLIC_URL + "/meshidoor_logo.png"}
                 alt="メシドア"
-                sx={{
-                  backgroundColor: "#ffffff",
-                  borderRadius: "6px",
-                  height: 36,
-                  objectFit: "contain",
-                  p: "2px",
-                  width: 36,
-                }}
+                className={classes.logoImage}
               />
               メシドア
             </Typography>
@@ -363,6 +460,7 @@ const Header = (props) => {
             </Box>
           </Toolbar>
         </AppBar>
+        {renderDrawer}
         {renderMobileMenu}
         {renderProfileMenu}
         {renderNotificationMenu}
@@ -382,10 +480,6 @@ Header.propTypes = {
   onSearch: PropTypes.func.isRequired,
   searchTerm: PropTypes.string.isRequired,
   unreadNotificationCount: PropTypes.number.isRequired,
-};
-
-Header.defaultProps = {
-  currentUser: null,
 };
 
 export default Header;
