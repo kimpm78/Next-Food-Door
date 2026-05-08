@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/Next-Food-Door/static/css/main.c2f8b37a.css",
-    "main.js": "/Next-Food-Door/static/js/main.1b91a942.js",
+    "main.css": "/Next-Food-Door/static/css/main.babb277b.css",
+    "main.js": "/Next-Food-Door/static/js/main.fa9d76af.js",
     "static/media/delivery01.png": "/Next-Food-Door/static/media/delivery01.7c4c82b5e933d03458b3.png",
     "index.html": "/Next-Food-Door/index.html",
-    "main.c2f8b37a.css.map": "/Next-Food-Door/static/css/main.c2f8b37a.css.map",
-    "main.1b91a942.js.map": "/Next-Food-Door/static/js/main.1b91a942.js.map"
+    "main.babb277b.css.map": "/Next-Food-Door/static/css/main.babb277b.css.map",
+    "main.fa9d76af.js.map": "/Next-Food-Door/static/js/main.fa9d76af.js.map"
   },
   "entrypoints": [
-    "static/css/main.c2f8b37a.css",
-    "static/js/main.1b91a942.js"
+    "static/css/main.babb277b.css",
+    "static/js/main.fa9d76af.js"
   ]
 }
